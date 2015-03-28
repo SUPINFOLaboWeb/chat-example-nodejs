@@ -5,7 +5,7 @@ Ce projet a été initialisé dans le cadre de l'apprentissage à NodeJS mis en 
 
 ## Fonctionnalités
 
-Le cahier des charges est disponible au lien suivant : [Cahier des charges](https://docs.google.com/document/d/1h5XiL2kyBYkIwJaKcNtds4vE9uq2bs7zpvAyOPUtKsM/edit?usp=sharing)
+Le cahier des charges est disponible au lien suivant : [Cahier des charges](https://github.com/SUPINFOLaboWeb/chat-example-nodejs/wiki/Cahier-des-charges)
 
 ## Branches
 
