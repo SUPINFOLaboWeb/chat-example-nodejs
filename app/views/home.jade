@@ -1,0 +1,29 @@
+extends layout
+
+block content
+    .site-wrapper
+      .site-wrapper-inner
+        .cover-container
+          div(class='masthead clearfix')
+            div(class='inner')
+              h3.masthead-brand Chat
+              nav
+                ul(class='nav masthead-nav')
+                  li(class='active')
+                    a(href='#') Home
+                  li
+                    a(href='/login') Login
+
+
+          div(class='inner cover')
+            h1(class='cover-heading') Chat Application
+            p(class='lead') A Tiny Description.
+            p(class='lead')
+              a(href='/chat', class='btn btn-lg btn-default') Getting Started
+
+          div(class='mastfoot')
+            div(class='inner')
+              p By LaboWeb
+
+block style
+  link(rel="stylesheet", href="/css/home.css")
