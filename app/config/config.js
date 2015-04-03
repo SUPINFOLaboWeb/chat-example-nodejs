@@ -12,6 +12,7 @@ var config = {
   app: {
     name: 'chat',
   },
+  db: 'mongodb://localhost/chat',
   cookie: { 
     path: '/',
     httpOnly: true,
