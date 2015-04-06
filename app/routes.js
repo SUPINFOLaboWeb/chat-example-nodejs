@@ -1,39 +1,82 @@
 'use strict';
 
-var passport = require('passport');
+var passport = require('passport'),
+    ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn,
+    ensureLoggedOut = require('connect-ensure-login').ensureLoggedOut,
+
+    mongoose = require('mongoose'),
+    User = mongoose.model('User');
 
 module.exports = function(app) {
 
   app.get('/', function(req, res) {
+
     res.render('home');
   });
 
-  app.get('/register', function(req, res) {
-    if(req.user) { return res.redirect(301, '/chat'); }
+  app.get('/register',
+    ensureLoggedOut('/chat'),
+    function(req, res) {
 
-    res.render('register');
-  });
+      res.render('register');
+    }
+  );
 
-  app.post('/register', function(req, res) {
-    var user = new User();
-      user.username    = req.param('username');
-      user.displayName = user.username;
-      user.password    = req.param('password');
+  app.post('/register',
+    ensureLoggedOut('/chat'),
+    function(req, res) {
 
-  })
+      var error = null;
 
-  app.get('/login', function(req, res) {
-    if(req.user) { return res.redirect(301, '/chat'); }
+      if(!req.params.username) {
+        error = 'The username field is required.';
+      } else if(!req.params.password) {
+        error = 'The password field is required.';
+      } else if(req.params.password != req.params.password_confirmation) {
+        error = 'The password confirmation does not match.';
+      }
 
-    res.render('login');
-  })
+      if(error !== null) {
+        console.log(error);
+        return res.render('register', { error: error });
+      }
 
-  app.post('/login', passport.authenticate('local', {
-    successRedirect: '/chat',
-    failureRedirect: '/login'
-  }));
+      var user = new User();
+        user.username    = req.params.username;
+        user.displayName = user.username;
+        user.password    = req.params.password;
 
-  app.get('/chat', function(req, res) {
-    res.render('chat');
-  });
+      user.save(function(err) {
+        if(err) {
+          return res.render('register', { error: 'An unknown error occured.' });
+        }
+
+        res.redirect('/login');
+      });
+    }
+  );
+
+  app.get('/login',
+    ensureLoggedOut('/chat'),
+    function(req, res) {
+
+      res.render('login');
+    }
+  );
+
+  app.post('/login',
+    ensureLoggedOut('/chat'),
+    passport.authenticate('local', {
+      successRedirect: '/chat',
+      failureRedirect: '/login'
+    })
+  );
+
+  app.get('/chat',
+    ensureLoggedIn('/login'),
+    function(req, res) {
+
+      res.render('chat');
+    }
+  );
 };

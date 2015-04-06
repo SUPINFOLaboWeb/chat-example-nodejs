@@ -39,3 +39,7 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+.bg-success, .bg-danger {
+  padding: 15px;
+}

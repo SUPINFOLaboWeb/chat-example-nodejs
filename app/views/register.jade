@@ -2,14 +2,17 @@ extends layout
 
 block content
   .container
-    form(class='form-auth form-register', action='register')
+    form(class='form-auth form-register', action='register', method='post')
       h2(class='form-auth form-register-heading') Registration
+      if error
+        p(class='alert alert-danger') #{error}
+
       label(for='username', class='sr-only') Username
-      input(type='text', id='username', class='form-control', placeholder='Username', required, autofocus)
+      input(type='text', id='username', name='username', class='form-control', placeholder='Username', required, autofocus)
       label(for='password', class='sr-only') Password
-      input(type='password', id='password', class='form-control', placeholder='Password', required)
-      label(for='checkPassword', class='sr-only') Password
-      input(type='password', id='checkPassword', class='form-control last-input', placeholder='Password Verification', required)
+      input(type='password', id='password', name='password', class='form-control', placeholder='Password', required)
+      label(for='password_confirmation', class='sr-only') Password
+      input(type='password', id='password_confirmation', name='password_confirmation', class='form-control last-input', placeholder='Password Verification', required)
 
       button(class='btn btn-lg btn-primary btn-block', type='submit') Sign in
 
