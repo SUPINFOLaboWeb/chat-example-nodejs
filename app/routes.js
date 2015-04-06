@@ -10,14 +10,12 @@ var passport = require('passport'),
 module.exports = function(app) {
 
   app.get('/', function(req, res) {
-
     res.render('home');
   });
 
   app.get('/register',
     ensureLoggedOut('/chat'),
     function(req, res) {
-
       res.render('register');
     }
   );
@@ -25,7 +23,6 @@ module.exports = function(app) {
   app.post('/register',
     ensureLoggedOut('/chat'),
     function(req, res) {
-
       var error = null;
 
       if(!req.params.username) {
@@ -59,7 +56,6 @@ module.exports = function(app) {
   app.get('/login',
     ensureLoggedOut('/chat'),
     function(req, res) {
-
       res.render('login');
     }
   );
@@ -75,8 +71,10 @@ module.exports = function(app) {
   app.get('/chat',
     ensureLoggedIn('/login'),
     function(req, res) {
+      req.user.token = req.user.generateToken();
+      req.user.save();
 
-      res.render('chat');
+      res.render('chat', { token: req.user.token });
     }
   );
 };

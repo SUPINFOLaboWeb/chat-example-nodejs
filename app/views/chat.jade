@@ -2,4 +2,9 @@ extends layout
 
 block content
   h1 Chat
+  script(type='text/javascript' src='/js/socket.io.js')
   script(type='text/javascript' src='/js/chat.js')
+  script(type='text/javascript').
+    //only if socket.io server is not attached to webserver
+    //chat.authenticate('#{token}');
+    chat.start();

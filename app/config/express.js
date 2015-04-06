@@ -7,7 +7,7 @@ var express      = require('express'),
     flash        = require('connect-flash'),
     jade         = require('jade');
 
-module.exports = function(app, config) {
+module.exports = function(app, sessionStore, config) {
   app.use(express.static(config.root + '/public'));
 
   app.use(cookieParser());
@@ -16,6 +16,7 @@ module.exports = function(app, config) {
   app.use(bodyParser.json());
 
   app.use(session({
+    store: sessionStore,
     name: 'sid',
     cookie: config.cookie,
     secret: 'key',

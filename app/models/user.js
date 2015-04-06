@@ -1,16 +1,24 @@
 'use strict';
 
 var mongoose = require('mongoose'),
+    crypto   = require('crypto'),
     bcrypt   = require('bcryptjs'),
     Schema   = mongoose.Schema,
 
-    SALT_WORK_FACTOR = 10;
+    SALT_WORK_FACTOR = 10,
+
+    generateToken = function() {
+      return crypto.createHash('md5')
+                  .update( Date.now() + Math.random().toString() )
+                  .digest('hex');
+    }
 
 var UserSchema = new Schema({
   provider: String,
   username: String,
   password: String,
-  displayName: String
+  displayName: String,
+  token: String
 });
 
 UserSchema.pre('save', function(next) {
@@ -29,6 +37,14 @@ UserSchema.pre('save', function(next) {
     });
   });
 });
+
+UserSchema.statics.findByToken = function(token, callback) {
+  return this.find({ token: token }, callback);
+}
+
+UserSchema.methods.generateToken = function() {
+  return (generateToken());
+};
 
 UserSchema.methods.comparePassword = function(candidatePassword, callback) {
   var user = this;
