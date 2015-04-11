@@ -15,6 +15,7 @@ var RoomSchema = new Schema({
   description: { type: String},
   token: { type: String, index: { unique: true }, default: generateToken },
   master: { type: Schema.Types.ObjectId, ref: 'User' },
+  users: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   createdAt: { type: Date, default: Date.now }
 });
 
