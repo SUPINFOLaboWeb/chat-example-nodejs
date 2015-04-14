@@ -5,7 +5,9 @@ var passport = require('passport'),
     ensureLoggedOut = require('connect-ensure-login').ensureLoggedOut,
 
     mongoose = require('mongoose'),
-    User = mongoose.model('User');
+
+    User = mongoose.model('User'),
+    Room = mongoose.model('Room');
 
 module.exports = function(app) {
 
@@ -25,16 +27,15 @@ module.exports = function(app) {
     function(req, res) {
       var error = null;
 
-      if(!req.params.username) {
+      if (!req.params.username) {
         error = 'The username field is required.';
-      } else if(!req.params.password) {
+      } else if (!req.params.password) {
         error = 'The password field is required.';
-      } else if(req.params.password != req.params.password_confirmation) {
+      } else if (req.params.password != req.params.password_confirmation) {
         error = 'The password confirmation does not match.';
       }
 
-      if(error !== null) {
-        console.log(error);
+      if (error !== null) {
         return res.render('register', { error: error });
       }
 
@@ -44,7 +45,7 @@ module.exports = function(app) {
         user.password    = req.params.password;
 
       user.save(function(err) {
-        if(err) {
+        if (err) {
           return res.render('register', { error: 'An unknown error occured.' });
         }
 
@@ -66,6 +67,44 @@ module.exports = function(app) {
       successRedirect: '/chat',
       failureRedirect: '/login'
     })
+  );
+
+  app.post('/room/create',
+    ensureLoggedIn('/login'),
+    function(req, res) {
+      var error = null;
+
+      if (!req.body.name) {
+        error = 'The room name field is required.';
+      }
+
+      if (error !== null) {
+        return res.redirect('/chat');
+      }
+
+      var room = new Room();
+        room.name = req.body.name;
+        room.master = req.user;
+        room.users = [req.user];
+
+      room.save(function(err) {
+        return res.redirect('/chat');
+      });
+
+    }
+  );
+
+  app.post('/room/member/add',
+    ensureLoggedIn('/login'),
+    function(req, res) {
+      var error = null;
+
+      if (!req.params.username) {
+        error = 'The username field is required.';
+      }
+
+      
+    }
   );
 
   app.get('/chat',

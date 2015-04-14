@@ -12,11 +12,14 @@ var mongoose = require('mongoose'),
 
 var RoomSchema = new Schema({
   name: { type: String, default: null },
-  description: { type: String},
   token: { type: String, index: { unique: true }, default: generateToken },
   master: { type: Schema.Types.ObjectId, ref: 'User' },
   users: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   createdAt: { type: Date, default: Date.now }
 });
+
+RoomSchema.statics.findAllByUser = function(ref, callback) {
+  this.find({ users: ref }, callback);
+};
 
 mongoose.model('Room', RoomSchema);

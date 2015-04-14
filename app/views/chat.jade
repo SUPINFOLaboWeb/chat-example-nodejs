@@ -1,9 +1,18 @@
 extends layout
 
 block content
-  h1 Chat
+  #main
+
   script(type='text/javascript' src='/js/socket.io.js')
+  script(type='text/javascript' src='/js/react-with-addons.min.js')
   script(type='text/javascript' src='/js/chat.js')
+  script(type='text/javascript' src='/js/components/RoomFormModal.js')
+  script(type='text/javascript' src='/js/components/RoomItem.js')
+  script(type='text/javascript' src='/js/components/RoomList.js')
+  script(type='text/javascript' src='/js/components/MessageItem.js')
+  script(type='text/javascript' src='/js/components/MessageList.js')
+  script(type='text/javascript' src='/js/components/WriteMessage.js')
+  script(type='text/javascript' src='/js/app.js')
   script(type='text/javascript').
     //only if socket.io server is not attached to webserver
     //chat.authenticate('#{token}');
