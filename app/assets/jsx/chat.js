@@ -4,7 +4,11 @@
   var socket = io();
 
   var handler = {
-    rooms: []
+    roomCreated: function(){},
+    roomsUpdated: function(){},
+    message: function(){},
+    userJoined: function(){},
+    userLeft: function(){}
   };
 
   var chat = {};
@@ -30,7 +34,7 @@
   };
 
   chat.message = function(room, message) {
-    
+    socket.emit('new message', room, message);
   };
 
   chat.onRoomCreated = function(callback) {
@@ -49,46 +53,54 @@
     handler.roomsUpdated = callback;
   };
 
-  chat.onMessage = function(room, callback) {
-    if (typeof callback != 'function' || !handler.rooms[room]) {
+  chat.onMessage = function(callback) {
+    if (typeof callback != 'function') {
       return;
     }
 
-    handler.rooms[room].message = callback;
+    handler.message = callback;
   };
 
-  chat.onUserJoined = function(room, callback) {
-    if (typeof callback != 'function' || !handler.rooms[room]) {
+  chat.onUserJoined = function(callback) {
+    if (typeof callback != 'function') {
       return;
     }
 
-    handler.rooms[room].userJoined = callback;
+    handler.userJoined = callback;
   };
 
-  chat.onUserLeft = function(room, callback) {
-    if (typeof callback != 'function' || !handler.rooms[room]) {
+  chat.onUserLeft = function(callback) {
+    if (typeof callback != 'function') {
       return;
     }
 
-    handler.rooms[room].userLeft = callback;
+    handler.userLeft = callback;
   };
 
   chat.start = function() {
     socket.on('rooms', function(rooms) {
-      rooms = rooms.rooms;
-
-      for (var room in rooms) {
-        handler.rooms[room] = handler.rooms[room] | {};
-      }
-
       if (typeof handler.roomsUpdated === 'function') {
         handler.roomsUpdated(rooms);
       }
     });
 
-    socket.on('message', handler.message);
-    socket.on('user join', handler.joinedUser);
-    socket.on('user left', handler.leftUser);
+    socket.on('message', function(room, message) {
+      if (typeof handler.message === 'function') {
+        handler.message(room, message);
+      }
+    });
+
+    socket.on('user join', function(room, user) {
+      if (typeof handler.userJoined === 'function') {
+        handler.userJoined(room, user);
+      }
+    });
+
+    socket.on('user left', function(room, user) {
+      if (typeof handler.userLeft === 'function') {
+        handler.userLeft(room, user);
+      }
+    });
 
     React.render(React.createElement(ChatApp, null), document.getElementById('main'));
   };

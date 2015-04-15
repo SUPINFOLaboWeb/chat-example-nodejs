@@ -9,16 +9,18 @@ var WriteMessage = React.createClass({
     };
   },
 
-  handleChange: function() {
-
-  },
-
   handleSubmit: function() {
+    this.props.writeMessageHandler(this.state.message);
 
+    this.setState({
+      message: ''
+    });
+
+    return false;
   },
 
   render: function() {
-    return <form onsubmit={this.handleSubmit}>
+    return <form role="form" onSubmit={this.handleSubmit}>
       <input type="text" valueLink={this.linkState('message')} />
     </form>
   }

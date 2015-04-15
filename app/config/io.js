@@ -9,10 +9,23 @@ var socket = require('socket.io'),
     Room = mongoose.model('Room'),
     Message = mongoose.model('Message');
 
+function in_array(needle, haystack) {
+  var key = '';
+
+  for (key in haystack) {
+    if (haystack[key] === needle) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
 module.exports = function(server, sessionStore, config) {
   var io = socket(server);
 
-  var _user = {};
+  var _user = {},
+      _room = {};
 
   io.on('connection', function(socket) {
     _user[socket.id] = {
@@ -40,7 +53,21 @@ module.exports = function(server, sessionStore, config) {
               Room.findAllByUser(user._id, function(err, rooms) {
                 if (err) { return; }
 
-                _user[socket.id].rooms = rooms;
+                var roomToken = null;
+
+                _user[socket.id].rooms = [];
+
+                for(var room in rooms) {
+                  roomToken = rooms[room].token;
+
+                  if(!_room[roomToken]) {
+                    _room[roomToken] = rooms[room];
+                  }
+
+                  _user[socket.id].rooms.push(roomToken);
+
+                  socket.join(roomToken);
+                }
               });
             });
           }
@@ -49,11 +76,21 @@ module.exports = function(server, sessionStore, config) {
     }
 
     socket.on('get rooms', function() {
-      socket.emit('rooms', { rooms: _user[socket.id].rooms });
+      var rooms = [], roomToken = null;
+
+      for(var i = 0, j = _user[socket.id].rooms.length; i < j; i += 1) {
+        roomToken = _user[socket.id].rooms[i];
+
+        rooms.push(_room[roomToken]);
+      }
+
+      socket.emit('rooms', rooms);
     });
 
     socket.on('previous messages', function(room, page) {
-      
+      if(!in_array(room, _user[socket.id].rooms)) { return; }
+
+
     });
 
     //only if socket.io server is not attached to webserver
@@ -69,16 +106,19 @@ module.exports = function(server, sessionStore, config) {
 
     });
 
-    socket.on('new message', function(room, message) {
+    socket.on('new message', function(roomToken, text) {
+      if(!in_array(roomToken, _user[socket.id].rooms)) { return; }
 
-    });
+      var room = _room[roomToken];
 
-    socket.on('start typing', function() {
+      var message = new Message();
+        message.text = text;
+        message.room = room;
+        message.author = _user[socket.id].u;
 
-    });
+      message.save();
 
-    socket.on('stop typing', function() {
-      
+      io.sockets.to(roomToken).emit('message', roomToken, message);
     });
   });
 };

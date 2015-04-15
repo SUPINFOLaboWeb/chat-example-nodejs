@@ -4,6 +4,8 @@ var ChatApp = React.createClass({
   getInitialState: function() {
     chat.getRooms(this.roomsHandler);
 
+    chat.onMessage(this.messageHandler);
+
     return {
       rooms: [],
       messages: [],
@@ -46,6 +48,24 @@ var ChatApp = React.createClass({
     });
   },
 
+  messageHandler: function(room, message) {
+    var messages = this.state.messages;
+
+    messages[room].push(message);
+
+    this.setState({
+      messages: messages
+    });
+  },
+
+  joinRoomHandler: function(room, username) {
+
+  },
+
+  leftRoomHandler: function(room, username) {
+
+  },
+
   changeRoomHandler: function(room) {
     this.setState({
       currentRoom: room
@@ -53,7 +73,7 @@ var ChatApp = React.createClass({
   },
 
   writeMessageHandler: function(message) {
-    chat.message(currentRoom, message);
+    chat.message(this.state.currentRoom, message);
   },
 
   roomsHandler: function(rooms) {
@@ -69,11 +89,18 @@ var ChatApp = React.createClass({
 
     return <div className="row">
       <div className="col-md-4">
-        <RoomList rooms={this.state.rooms} changeRoomHandler={this.changeRoomHandler} />
+        <div className="container-fluid">
+          <div className="panel panel-default">
+            <div className="panel-heading">Rooms</div>
+            <RoomList rooms={this.state.rooms} changeRoomHandler={this.changeRoomHandler} />
+          </div>
+        </div>
       </div>
       <div className="col-md-8">
-        <MessageList messages={messages} />
-        <WriteMessage  />
+        <div className="container-fluid">
+          <MessageList messages={messages} />
+          <WriteMessage writeMessageHandler={this.writeMessageHandler} />
+        </div>
       </div>
     </div>
   }

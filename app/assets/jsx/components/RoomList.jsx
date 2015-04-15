@@ -1,6 +1,10 @@
 'use strict';
 
 var RoomList = React.createClass({
+  handleClick: function(token) {
+    this.props.changeRoomHandler(token);
+  },
+
   render: function() {
     var rooms = [];
 
@@ -8,7 +12,7 @@ var RoomList = React.createClass({
       var room = this.props.rooms[index];
 
       rooms.push(<RoomItem
-        onclick={this.props.changeRoomHandler.bind(this, index)}
+        onClick={this.handleClick.bind(this, room.token)}
         name={room.name} />);
     }
 

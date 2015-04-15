@@ -8,6 +8,7 @@ module.exports = function(grunt) {
           { expand: true, flatten: true, src: ['bower_components/jquery/dist/*.min.{js,map}'], dest: 'public/js', filter: 'isFile' },
           { expand: true, flatten: true, src: ['bower_components/bootstrap/dist/js/*.min.{js,map}'], dest: 'public/js', filter: 'isFile' },
           { expand: true, flatten: true, src: ['bower_components/bootstrap/dist/fonts/*'], dest: 'public/fonts', filter: 'isFile' },
+          { expand: true, flatten: true, src: ['node_modules/socket.io-client/socket.io.js'], dest: 'public/js' },
           { expand: true, flatten: true, src: ['bower_components/react/*.min.{js,map}'], dest: 'public/js', filter: 'isFile' },
           { expand: true, flatten: true, src: ['app/assets/jsx/*.js'], dest: 'public/js', filter: 'isFile' }
         ]

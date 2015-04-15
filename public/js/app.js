@@ -4,6 +4,8 @@ var ChatApp = React.createClass({displayName: "ChatApp",
   getInitialState: function() {
     chat.getRooms(this.roomsHandler);
 
+    chat.onMessage(this.messageHandler);
+
     return {
       rooms: [],
       messages: [],
@@ -46,6 +48,24 @@ var ChatApp = React.createClass({displayName: "ChatApp",
     });
   },
 
+  messageHandler: function(room, message) {
+    var messages = this.state.messages;
+
+    messages[room].push(message);
+
+    this.setState({
+      messages: messages
+    });
+  },
+
+  joinRoomHandler: function(room, username) {
+
+  },
+
+  leftRoomHandler: function(room, username) {
+
+  },
+
   changeRoomHandler: function(room) {
     this.setState({
       currentRoom: room
@@ -53,7 +73,7 @@ var ChatApp = React.createClass({displayName: "ChatApp",
   },
 
   writeMessageHandler: function(message) {
-    chat.message(currentRoom, message);
+    chat.message(this.state.currentRoom, message);
   },
 
   roomsHandler: function(rooms) {
@@ -69,11 +89,18 @@ var ChatApp = React.createClass({displayName: "ChatApp",
 
     return React.createElement("div", {className: "row"}, 
       React.createElement("div", {className: "col-md-4"}, 
-        React.createElement(RoomList, {rooms: this.state.rooms, changeRoomHandler: this.changeRoomHandler})
+        React.createElement("div", {className: "container-fluid"}, 
+          React.createElement("div", {className: "panel panel-default"}, 
+            React.createElement("div", {className: "panel-heading"}, "Rooms"), 
+            React.createElement(RoomList, {rooms: this.state.rooms, changeRoomHandler: this.changeRoomHandler})
+          )
+        )
       ), 
       React.createElement("div", {className: "col-md-8"}, 
-        React.createElement(MessageList, {messages: messages}), 
-        React.createElement(WriteMessage, null)
+        React.createElement("div", {className: "container-fluid"}, 
+          React.createElement(MessageList, {messages: messages}), 
+          React.createElement(WriteMessage, {writeMessageHandler: this.writeMessageHandler})
+        )
       )
     )
   }
