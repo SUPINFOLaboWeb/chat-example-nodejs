@@ -58,14 +58,6 @@ var ChatApp = React.createClass({displayName: "ChatApp",
     });
   },
 
-  joinRoomHandler: function(room, username) {
-
-  },
-
-  leftRoomHandler: function(room, username) {
-
-  },
-
   changeRoomHandler: function(room) {
     this.setState({
       currentRoom: room

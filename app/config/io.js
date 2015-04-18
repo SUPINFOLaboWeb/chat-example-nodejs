@@ -87,12 +87,6 @@ module.exports = function(server, sessionStore, config) {
       socket.emit('rooms', rooms);
     });
 
-    socket.on('previous messages', function(room, page) {
-      if(!in_array(room, _user[socket.id].rooms)) { return; }
-
-
-    });
-
     //only if socket.io server is not attached to webserver
     socket.on('authenticate', function(token) {
       User.findByToken(token, function(err, user) {
@@ -100,10 +94,6 @@ module.exports = function(server, sessionStore, config) {
 
         _user[socket.id].id = user;
       });
-    });
-
-    socket.on('join room', function(roomToken) {
-
     });
 
     socket.on('new message', function(roomToken, text) {
