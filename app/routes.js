@@ -69,6 +69,13 @@ module.exports = function(app) {
     })
   );
 
+  app.get('/logout',
+    ensureLoggedIn('/login'),
+    function(req, res) {
+      req.logout();
+      res.redirect('/');
+    });
+
   app.post('/room/create',
     ensureLoggedIn('/login'),
     function(req, res) {
