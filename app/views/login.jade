@@ -1,3 +1,6 @@
+block vars
+  - var bodyclassname = 'auth-page';
+
 extends layout
 
 block content
@@ -10,6 +13,3 @@ block content
       input(type='password', id='password', name='password', class='form-control last-input', placeholder='Password', required)
 
       button(class='btn btn-lg btn-primary btn-block', type='submit') Sign in
-
-block style
-  link(rel="stylesheet", href="/css/auth.css")

@@ -26,18 +26,30 @@ module.exports = function(grunt) {
     },
 
     less: {
-      options: {
-        paths: ['app/assets/less', 'bower_components/bootstrap/less']
+      production: {
+        options: {
+          paths: ['app/assets/less', 'bower_components/bootstrap/less'],
+          compress: true
+        },
+        files: {
+          'public/css/style.css': 'app/assets/less/app.less'
+        }
       },
-      files: {
-        'public/css/style.css': 'app/assets/less/app.less'
+
+      development: {
+        options: {
+          paths: ['app/assets/less', 'bower_components/bootstrap/less']
+        },
+        files: {
+          'public/css/style.css': 'app/assets/less/app.less'
+        }
       }
     },
 
     watch: {
       less: {
         files: ['app/assets/less/**/*.less'],
-        tasks: ['less'],
+        tasks: ['less:development'],
         options: {
           livereload: true
         }
@@ -66,7 +78,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-react');
 
-  grunt.registerTask('build', ['copy', 'less', 'react']);
+  grunt.registerTask('build', ['copy', 'less:production', 'react']);
 
-  grunt.registerTask('default', ['copy', 'less', 'react', 'watch']);
+  grunt.registerTask('default', ['copy', 'less:development', 'react', 'watch']);
 };

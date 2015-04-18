@@ -1,13 +1,14 @@
+block vars
 doctype html
-html
+html(class=(htmlclassname?htmlclassname:''))
   head
     meta(charset='utf-8')
     meta(http-equiv='X-UA-Compatible', content='IE=edge')
     meta(name='viewport', content='width=device-width, initial-scale=1')
     title Chat
-    link(rel="stylesheet", href="/css/bootstrap.min.css")
+    link(rel="stylesheet", href="/css/style.css")
     script(type='text/javascript' src='/js/jquery.min.js')
     script(type='text/javascript' src='/js/bootstrap.min.js')
     block style
-  body
+  body(class=(bodyclassname?bodyclassname:''))
     block content
