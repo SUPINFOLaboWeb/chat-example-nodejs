@@ -10,7 +10,6 @@ Le cahier des charges est disponible au lien suivant : [Cahier des charges](http
 ## Branches
 
 Plusieurs branches existent représentant chacune un développement différent de l'application. Voici les différentes branches avec leur particularité :
- - stable-sql : Basée sur une base de données relationnelle (MySQL)
  - stable-nosql : Basée sur une base de données NoSQL (MongoDB)
 
 ## License
